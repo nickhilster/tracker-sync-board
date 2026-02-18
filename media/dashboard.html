@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src {{styleCsp}}; script-src {{scriptCsp}};">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{styleUri}}">
+  <title>Tracker Sync Board</title>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h2>Tracker Sync Board</h2>
+      <div id="status" class="small">State synced through .tracker/state.json</div>
+      <div class="small">Updated: <span id="updatedAt">-</span></div>
+      <div class="row">
+        <button id="refreshBtn">Refresh</button>
+        <button id="saveBtn">Save</button>
+        <button id="openFileBtn">Open State File</button>
+        <button id="processBtn">Process Human Messages</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Done</div><div id="countDone" class="v">0</div></div>
+      <div class="stat"><div class="k">In Progress</div><div id="countProgress" class="v">0</div></div>
+      <div class="stat"><div class="k">To Do</div><div id="countTodo" class="v">0</div></div>
+      <div class="stat"><div class="k">Blocked</div><div id="countBlocked" class="v">0</div></div>
+      <div class="stat"><div class="k">Messages</div><div id="countMessages" class="v">0</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Add Task</h3>
+      <div class="row">
+        <input id="taskTitle" placeholder="Task title">
+      </div>
+      <div class="row">
+        <textarea id="taskNote" rows="2" placeholder="Notes"></textarea>
+      </div>
+      <div class="row">
+        <select id="taskOwner">
+          <option value="human">Human</option>
+          <option value="ai">AI</option>
+        </select>
+        <select id="taskLane">
+          <option value="todo">To Do</option>
+          <option value="progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+        <input id="taskEffort" placeholder="Effort (e.g. 1d)">
+      </div>
+      <div class="row">
+        <button id="addTaskBtn">Add Task</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Message AI</h3>
+      <div class="row"><input id="msgTitle" placeholder="Message title"></div>
+      <div class="row"><textarea id="msgBody" rows="3" placeholder="Request for AI"></textarea></div>
+      <div class="row">
+        <select id="msgType">
+          <option value="request">Request</option>
+          <option value="blocker">Blocker</option>
+          <option value="note">Note</option>
+        </select>
+        <button id="sendMsgBtn">Send</button>
+      </div>
+    </div>
+
+    <div id="board" class="board"></div>
+
+    <div class="card">
+      <h3>Conversation</h3>
+      <div id="messages"></div>
+    </div>
+  </div>
+
+  <script src="{{scriptUri}}"></script>
+</body>
+</html>

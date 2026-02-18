@@ -1,0 +1,62 @@
+{
+  "name": "tracker-sync-board",
+  "displayName": "Tracker Sync Board",
+  "description": "Two-way project tracker board in VS Code with AI and Human ownership lanes.",
+  "version": "0.1.0",
+  "publisher": "nickhilster",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:trackerSync.dashboardView",
+    "onCommand:trackerSync.openStateFile",
+    "onCommand:trackerSync.processHumanMessages"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "trackerSync",
+          "title": "Tracker",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "trackerSync": [
+        {
+          "id": "trackerSync.dashboardView",
+          "name": "Dashboard"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "trackerSync.openStateFile",
+        "title": "Tracker: Open State File"
+      },
+      {
+        "command": "trackerSync.processHumanMessages",
+        "title": "Tracker: Process Human Messages"
+      },
+      {
+        "command": "trackerSync.refreshDashboard",
+        "title": "Tracker: Refresh Dashboard"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "node ./node_modules/typescript/bin/tsc -p ./",
+    "watch": "node ./node_modules/typescript/bin/tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.57",
+    "@types/vscode": "^1.96.0",
+    "typescript": "^5.8.3"
+  }
+}
