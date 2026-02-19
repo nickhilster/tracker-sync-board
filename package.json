@@ -13,7 +13,8 @@
   "activationEvents": [
     "onView:trackerSync.dashboardView",
     "onCommand:trackerSync.openStateFile",
-    "onCommand:trackerSync.processHumanMessages"
+    "onCommand:trackerSync.processHumanMessages",
+    "onCommand:trackerSync.seedRoadmap"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -46,6 +47,10 @@
       {
         "command": "trackerSync.refreshDashboard",
         "title": "Tracker: Refresh Dashboard"
+      },
+      {
+        "command": "trackerSync.seedRoadmap",
+        "title": "Tracker: Initialize Extension Roadmap"
       }
     ]
   },

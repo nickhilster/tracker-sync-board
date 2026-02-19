@@ -6,6 +6,7 @@ const STATE_RELATIVE_PATH = ".tracker/state.json";
 type TaskLane = "todo" | "progress" | "done";
 type TaskOwner = "human" | "ai";
 type TaskStatus = "todo" | "progress" | "done" | "blocked";
+type TaskPriority = "p0" | "p1" | "p2";
 
 interface TrackerTask {
   id: string;
@@ -15,6 +16,9 @@ interface TrackerTask {
   lane: TaskLane;
   status: TaskStatus;
   effort?: string;
+  milestone?: string;
+  priority?: TaskPriority;
+  createdAt?: string;
 }
 
 interface TrackerMessage {
@@ -37,11 +41,85 @@ interface TrackerState {
 }
 
 function defaultState(): TrackerState {
+  const now = new Date().toISOString();
+
   return {
     revision: 1,
-    updatedAt: new Date().toISOString(),
-    tasks: [],
-    messages: []
+    updatedAt: now,
+    tasks: [
+      {
+        id: "task-m1-ui-shell",
+        title: "Stabilize dashboard shell and state flow",
+        note: "Polish webview rendering, persistence, and task interactions.",
+        owner: "ai",
+        lane: "progress",
+        status: "progress",
+        effort: "1d",
+        milestone: "M1 Foundation",
+        priority: "p0",
+        createdAt: now
+      },
+      {
+        id: "task-m1-devloop",
+        title: "Set up dev loop (run, build, package)",
+        note: "Add scripts + docs for quick extension development.",
+        owner: "human",
+        lane: "todo",
+        status: "todo",
+        effort: "0.5d",
+        milestone: "M1 Foundation",
+        priority: "p1",
+        createdAt: now
+      },
+      {
+        id: "task-m2-sync",
+        title: "Implement robust file-watch merge strategy",
+        note: "Handle concurrent edits and conflict messaging.",
+        owner: "ai",
+        lane: "todo",
+        status: "todo",
+        effort: "1.5d",
+        milestone: "M2 Collaboration",
+        priority: "p0",
+        createdAt: now
+      },
+      {
+        id: "task-m2-aiops",
+        title: "Create message processing workflow",
+        note: "Support human -> ai -> human cycle directly in dashboard.",
+        owner: "human",
+        lane: "progress",
+        status: "progress",
+        effort: "1d",
+        milestone: "M2 Collaboration",
+        priority: "p1",
+        createdAt: now
+      },
+      {
+        id: "task-m3-release",
+        title: "Add VSIX packaging and release CI",
+        note: "Prepare publish-ready pipeline and versioning.",
+        owner: "human",
+        lane: "todo",
+        status: "todo",
+        effort: "1d",
+        milestone: "M3 Release",
+        priority: "p1",
+        createdAt: now
+      }
+    ],
+    messages: [
+      {
+        id: "msg-start",
+        from: "ai",
+        to: "human",
+        type: "note",
+        title: "Tracker v1 is ready",
+        body: "Use this board to drive the extension roadmap. Start by finishing M1 Foundation tasks.",
+        createdAt: now,
+        resolved: false
+      }
+    ]
   };
 }
 
@@ -197,6 +275,29 @@ class TrackerDashboardProvider implements vscode.WebviewViewProvider, vscode.Dis
     await this.pushState();
   }
 
+  public async seedRoadmap(): Promise<void> {
+    this.ensureWorkspaceBinding();
+    if (!this.store) {
+      void vscode.window.showWarningMessage("Open a workspace folder to use Tracker Sync Board.");
+      return;
+    }
+
+    const choice = await vscode.window.showWarningMessage(
+      "Replace current tracker state with the default extension roadmap?",
+      { modal: true },
+      "Replace"
+    );
+
+    if (choice !== "Replace") {
+      return;
+    }
+
+    const seeded = defaultState();
+    await this.store.write(seeded);
+    await this.pushState();
+    void vscode.window.showInformationMessage("Tracker roadmap initialized.");
+  }
+
   public async refresh(): Promise<void> {
     await this.pushState();
   }
@@ -254,6 +355,9 @@ class TrackerDashboardProvider implements vscode.WebviewViewProvider, vscode.Dis
         return;
       case "processHumanMessages":
         await this.processHumanMessages();
+        return;
+      case "seedRoadmap":
+        await this.seedRoadmap();
         return;
       default:
         return;
@@ -318,7 +422,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.window.registerWebviewViewProvider(TrackerDashboardProvider.viewType, provider),
     vscode.commands.registerCommand("trackerSync.openStateFile", async () => provider.openStateFile()),
     vscode.commands.registerCommand("trackerSync.processHumanMessages", async () => provider.processHumanMessages()),
-    vscode.commands.registerCommand("trackerSync.refreshDashboard", async () => provider.refresh())
+    vscode.commands.registerCommand("trackerSync.refreshDashboard", async () => provider.refresh()),
+    vscode.commands.registerCommand("trackerSync.seedRoadmap", async () => provider.seedRoadmap())
   );
 }
 

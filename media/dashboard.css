@@ -33,6 +33,7 @@ h4 { margin: 0; font-size: 12px; display: flex; align-items: center; gap: 6px; }
 }
 
 .row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.row > * { flex: 1 1 0; min-width: 120px; }
 
 input, select, textarea, button {
   width: 100%;
@@ -47,6 +48,7 @@ input, select, textarea, button {
 button {
   width: auto;
   cursor: pointer;
+  min-height: 30px;
 }
 
 .stats {
@@ -85,10 +87,18 @@ button {
 .chip.human { background: var(--human); }
 .chip.ai { background: var(--ai); }
 .chip.effort { background: #475569; }
+.chip.p0 { background: #dc2626; }
+.chip.p1 { background: #1d4ed8; }
+.chip.p2 { background: #6b7280; }
 
 .msg { border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
 .msg .hdr { display: flex; justify-content: space-between; gap: 6px; color: var(--muted); font-size: 11px; }
 .msg .body { margin: 4px 0; }
+.milestones { display: grid; gap: 8px; margin-top: 6px; }
+.milestone { border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
+.milestone .hdr { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 6px; }
+.milestone .bar { width: 100%; height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--line) 70%, transparent); overflow: hidden; }
+.milestone .fill { height: 100%; background: linear-gradient(90deg, #2563eb, #16a34a); }
 
 @media (max-width: 1000px) {
   .board { grid-template-columns: 1fr; }

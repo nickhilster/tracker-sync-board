@@ -32,6 +32,16 @@
     return task.status || task.lane || 'todo';
   }
 
+  function groupedMilestones(tasks) {
+    const groups = new Map();
+    for (const task of tasks) {
+      const key = task.milestone || 'Unassigned';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(task);
+    }
+    return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  }
+
   function nextLane(current) {
     if (current === 'todo') return 'progress';
     if (current === 'progress') return 'done';
@@ -55,6 +65,39 @@
     document.getElementById('countBlocked').textContent = counts.blocked;
     document.getElementById('countMessages').textContent = openMessages;
     document.getElementById('updatedAt').textContent = new Date(state.updatedAt).toLocaleString();
+  }
+
+  function renderMilestones() {
+    const root = document.getElementById('milestones');
+    root.innerHTML = '';
+
+    const entries = groupedMilestones(state.tasks);
+    if (entries.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'small';
+      empty.textContent = 'No milestones yet. Add tasks with milestone names to track progress.';
+      root.appendChild(empty);
+      return;
+    }
+
+    for (const [name, tasks] of entries) {
+      const total = tasks.length;
+      const done = tasks.filter(t => t.lane === 'done').length;
+      const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+      const item = document.createElement('article');
+      item.className = 'milestone';
+      item.innerHTML = `
+        <div class="hdr">
+          <strong>${name}</strong>
+          <span>${done}/${total} (${pct}%)</span>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:${pct}%"></div>
+        </div>
+      `;
+      root.appendChild(item);
+    }
   }
 
   function renderBoard() {
@@ -87,8 +130,10 @@
             <div class="chips">
               <span class="chip ${statusClass(task)}">${task.status}</span>
               <span class="chip ${task.owner}">${task.owner}</span>
+              <span class="chip ${task.priority || 'p1'}">${(task.priority || 'p1').toUpperCase()}</span>
               <span class="chip effort">${task.effort || 'n/a'}</span>
             </div>
+            <div class="note">${task.milestone || 'No milestone'}</div>
             <div class="note">${task.note || ''}</div>
             <div class="row">
               <button data-act="advance" data-id="${task.id}">Advance</button>
@@ -141,6 +186,7 @@
 
   function render() {
     renderStats();
+    renderMilestones();
     renderBoard();
     renderMessages();
   }
@@ -157,6 +203,10 @@
     });
 
     document.getElementById('saveBtn').addEventListener('click', saveState);
+
+    document.getElementById('seedBtn').addEventListener('click', () => {
+      vscode.postMessage({ type: 'seedRoadmap' });
+    });
 
     document.getElementById('openFileBtn').addEventListener('click', () => {
       vscode.postMessage({ type: 'openStateFile' });
@@ -179,11 +229,15 @@
         owner: document.getElementById('taskOwner').value,
         lane,
         status: lane === 'done' ? 'done' : 'todo',
-        effort: text('taskEffort')
+        effort: text('taskEffort'),
+        milestone: text('taskMilestone'),
+        priority: document.getElementById('taskPriority').value,
+        createdAt: new Date().toISOString()
       });
 
       setText('taskTitle', '');
       setText('taskNote', '');
+      setText('taskMilestone', '');
       setText('taskEffort', '');
 
       saveState();

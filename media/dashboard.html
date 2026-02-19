@@ -16,6 +16,7 @@
       <div class="row">
         <button id="refreshBtn">Refresh</button>
         <button id="saveBtn">Save</button>
+        <button id="seedBtn">Initialize Roadmap</button>
         <button id="openFileBtn">Open State File</button>
         <button id="processBtn">Process Human Messages</button>
       </div>
@@ -27,6 +28,11 @@
       <div class="stat"><div class="k">To Do</div><div id="countTodo" class="v">0</div></div>
       <div class="stat"><div class="k">Blocked</div><div id="countBlocked" class="v">0</div></div>
       <div class="stat"><div class="k">Messages</div><div id="countMessages" class="v">0</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Roadmap Progress</h3>
+      <div id="milestones" class="milestones"></div>
     </div>
 
     <div class="card">
@@ -47,6 +53,14 @@
           <option value="progress">In Progress</option>
           <option value="done">Done</option>
         </select>
+        <select id="taskPriority">
+          <option value="p1">Priority P1</option>
+          <option value="p0">Priority P0</option>
+          <option value="p2">Priority P2</option>
+        </select>
+      </div>
+      <div class="row">
+        <input id="taskMilestone" placeholder="Milestone (e.g. M1 Foundation)">
         <input id="taskEffort" placeholder="Effort (e.g. 1d)">
       </div>
       <div class="row">

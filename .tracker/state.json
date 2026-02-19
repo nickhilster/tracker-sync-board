@@ -1,0 +1,78 @@
+{
+  "revision": 1,
+  "updatedAt": "2026-02-19T00:00:00Z",
+  "tasks": [
+    {
+      "id": "task-m1-ui-shell",
+      "title": "Stabilize dashboard shell and state flow",
+      "note": "Polish webview rendering, persistence, and task interactions.",
+      "owner": "ai",
+      "lane": "progress",
+      "status": "progress",
+      "effort": "1d",
+      "milestone": "M1 Foundation",
+      "priority": "p0",
+      "createdAt": "2026-02-19T00:00:00Z"
+    },
+    {
+      "id": "task-m1-devloop",
+      "title": "Set up dev loop (run, build, package)",
+      "note": "Add scripts + docs for quick extension development.",
+      "owner": "human",
+      "lane": "todo",
+      "status": "todo",
+      "effort": "0.5d",
+      "milestone": "M1 Foundation",
+      "priority": "p1",
+      "createdAt": "2026-02-19T00:00:00Z"
+    },
+    {
+      "id": "task-m2-sync",
+      "title": "Implement robust file-watch merge strategy",
+      "note": "Handle concurrent edits and conflict messaging.",
+      "owner": "ai",
+      "lane": "todo",
+      "status": "todo",
+      "effort": "1.5d",
+      "milestone": "M2 Collaboration",
+      "priority": "p0",
+      "createdAt": "2026-02-19T00:00:00Z"
+    },
+    {
+      "id": "task-m2-aiops",
+      "title": "Create message processing workflow",
+      "note": "Support human -> ai -> human cycle directly in dashboard.",
+      "owner": "human",
+      "lane": "progress",
+      "status": "progress",
+      "effort": "1d",
+      "milestone": "M2 Collaboration",
+      "priority": "p1",
+      "createdAt": "2026-02-19T00:00:00Z"
+    },
+    {
+      "id": "task-m3-release",
+      "title": "Add VSIX packaging and release CI",
+      "note": "Prepare publish-ready pipeline and versioning.",
+      "owner": "human",
+      "lane": "todo",
+      "status": "todo",
+      "effort": "1d",
+      "milestone": "M3 Release",
+      "priority": "p1",
+      "createdAt": "2026-02-19T00:00:00Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-start",
+      "from": "ai",
+      "to": "human",
+      "type": "note",
+      "title": "Tracker v1 is ready",
+      "body": "Use this board to drive the extension roadmap. Start by finishing M1 Foundation tasks.",
+      "createdAt": "2026-02-19T00:00:00Z",
+      "resolved": false
+    }
+  ]
+}
